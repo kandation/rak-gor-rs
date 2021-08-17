@@ -81,7 +81,7 @@ fn main() {
 
         while CapsLockKey.is_toggled() {
             if !isFirst {
-                my_rect = active_window("12TailsTH"); // just for test
+                my_rect = active_window("____GAME___NAME____"); // just for test
                 isFirst = true;
                 println!("RakGor is Activate process every 60 sec");
                 //sleep(Duration::from_millis(1500));
@@ -102,14 +102,11 @@ fn main() {
                 if prev_time.elapsed() >= Duration::from_secs(60) {
                     prev_time = Instant::now();
                     OtherKey(VK_SNAPSHOT.try_into().unwrap()).release();
-
-                    println!("GG");
                     sleep(Duration::from_millis(100));
                 }else{
                     OtherKey(VK_SNAPSHOT.try_into().unwrap()).press();
                 }
-               
-                //send_print("12TailsTH");
+      
                 sleep(Duration::from_millis(10));
                 //MouseCursor::move_abs(my_rect.left + w/2+200, my_rect.top + h/2);
                 //MouseCursor::move_rel(200, 200);

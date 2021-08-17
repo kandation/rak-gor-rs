@@ -32,7 +32,7 @@
 // use std::ffi::CString;
 // //
 // // fn test_get_windows_by_name() {
-// //     let result = get_by_title("12TailsTH", None);
+// //     let result = get_by_title("__GAME__NAME___", None);
 // //     assert!(result.is_ok());
 // //     let result = result.unwrap();
 // //     assert!(result.len() > 0);
@@ -43,7 +43,7 @@
 // //     assert!(result.is_ok());
 // //     let result = result.unwrap();
 // //     println!("{}",result);
-// //     assert_eq!("12TailsTH", result);
+// //     assert_eq!("__GAME_NAME__", result);
 // //
 // // }
 //
@@ -63,7 +63,7 @@
 // use winapi::shared::windef::{HBITMAP, HBITMAP__, HGDIOBJ, HWND, POINT, RECT, SIZE};
 //
 // fn is_runner() {
-//     let window_name = CString::new("12TailsTH").unwrap();
+//     let window_name = CString::new("__GAME_NAME__").unwrap();
 //     unsafe {
 //         let window_handle = FindWindowA(std::ptr::null_mut(), window_name.as_ptr());
 //         user32::SetForegroundWindow(window_handle);
@@ -80,7 +80,7 @@
 //
 // fn main() {
 //     println!("Hello, world!");
-//     // let window_name = CString::new("12TailsTH").unwrap();
+//     // let window_name = CString::new("__GAME_NAME__").unwrap();
 //     // unsafe {
 //     //     let window_handle = FindWindowA(std::ptr::null_mut(), window_name.as_ptr());
 //     //     user32::SetForegroundWindow(window_handle);
@@ -182,5 +182,5 @@ fn find_window(name: &str) {
 }
 
 fn main() {
-    active_window("12TailsTH"); // just for test
+    active_window("__GAME_NAME__"); // just for test
 }
