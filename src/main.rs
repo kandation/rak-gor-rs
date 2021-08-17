@@ -21,7 +21,7 @@ use winapi::um::winuser::{
 
 // Keyboard Controller
 use inputbot::{KeybdKey::*, MouseButton::*, *};
-use std::{thread::sleep, time::Duration};
+use std::{thread::sleep, time::Duration, time::Instant};
 
 #[cfg(windows)]
 fn active_window(name: &str) -> RECT {
@@ -30,7 +30,7 @@ fn active_window(name: &str) -> RECT {
     let mut my_rect = unsafe { zeroed::<winapi::shared::windef::RECT>() };
 
     if hwnd != null_mut() {
-        println!("Windows Found");
+        println!("Game Found");
 
         unsafe {
             SetForegroundWindow(hwnd);
@@ -52,7 +52,7 @@ fn active_window(name: &str) -> RECT {
             let _window_rect = GetWindowRect(hwnd, &mut my_rect);
         }
     } else {
-        println!("Not Found");
+        println!("Game Not Found");
     }
     return my_rect;
 }
@@ -73,18 +73,21 @@ fn send_print(name: &str) {
 }
 
 fn main() {
-    NumLockKey.bind(|| {
+    CapsLockKey.bind(|| {
         let mut isFirst = false;
         let mut my_rect = unsafe { zeroed::<winapi::shared::windef::RECT>() };
-        while NumLockKey.is_toggled() {
+        let ten_millis = Duration::from_millis(1000);
+        let mut prev_time = Instant::now();
+
+        while CapsLockKey.is_toggled() {
             if !isFirst {
-                println!("isFirst");
                 my_rect = active_window("12TailsTH"); // just for test
                 isFirst = true;
+                println!("RakGor is Activate process every 60 sec");
                 //sleep(Duration::from_millis(1500));
             }
             let hasRect = unsafe { IsRectEmpty(&my_rect) } == 0;
-            println!("is REct == {}", hasRect);
+            //println!(" {}", hasRect);
             if hasRect {
                 // println!(
                 //     "Rect is T{} L{} R{} {}",
@@ -95,7 +98,17 @@ fn main() {
                 // //println!("RECT W{} H{}", h, w);
                 //RightButton.press();
                 //MouseCursor::move_abs(my_rect.left + w / 2, my_rect.top + h / 2);
-                OtherKey(VK_SNAPSHOT.try_into().unwrap()).press();
+                
+                if prev_time.elapsed() >= Duration::from_secs(60) {
+                    prev_time = Instant::now();
+                    OtherKey(VK_SNAPSHOT.try_into().unwrap()).release();
+
+                    println!("GG");
+                    sleep(Duration::from_millis(100));
+                }else{
+                    OtherKey(VK_SNAPSHOT.try_into().unwrap()).press();
+                }
+               
                 //send_print("12TailsTH");
                 sleep(Duration::from_millis(10));
                 //MouseCursor::move_abs(my_rect.left + w/2+200, my_rect.top + h/2);
@@ -105,6 +118,7 @@ fn main() {
             }
         }
         //RightButton.release();
+        println!("RakGor is De-Activate process");
     });
     handle_input_events();
 }
