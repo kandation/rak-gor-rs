@@ -1,0 +1,186 @@
+// use enigo::*;
+// use std::{thread, time};
+//
+//
+// // use winit::{
+// //     event::{Event, WindowEvent},
+// //     event_loop::{ControlFlow, EventLoop},
+// //     window::WindowBuilder,
+// //     platform::run_return,
+// // };
+//
+//
+// // use windows_win::{
+// //     Window
+// // };
+//
+//
+// // use windows_win::raw::window::{
+// //     get_by_class,
+// //     get_by_title,
+// //     get_by_pid,
+// //     is_visible,
+// //     get_text,
+// //     send_get_text,
+// //     send_set_text,
+// //     send_sys_command,
+// //     Builder,
+// //     destroy,
+// // };
+// use inputbot::{KeybdKey::*, MouseButton::*, *};
+// use std::{thread::sleep, time::Duration};
+// use std::ffi::CString;
+// //
+// // fn test_get_windows_by_name() {
+// //     let result = get_by_title("12TailsTH", None);
+// //     assert!(result.is_ok());
+// //     let result = result.unwrap();
+// //     assert!(result.len() > 0);
+// //     let result = result[0];
+// //
+// //
+// //     let result = get_text(result);
+// //     assert!(result.is_ok());
+// //     let result = result.unwrap();
+// //     println!("{}",result);
+// //     assert_eq!("12TailsTH", result);
+// //
+// // }
+//
+// extern crate winapi;
+// extern crate user32;
+//
+//
+// use std::ptr::null;
+// use user32::{FindWindowA, GetClientRect};
+//
+// use winapi::shared::ntdef::LONG;
+// use winapi::shared::windef::LPRECT;
+// use std::ptr::null_mut;
+// use std::mem::zeroed;
+// use winapi::um::winuser::{FindWindowW, GetWindowDC, GetDC, ReleaseDC};
+// use winapi::um::wingdi::{CreateBitmap, CreateCompatibleBitmap, CreateCompatibleDC, SelectObject, GetObjectW, SaveDC, DeleteDC, DeleteObject};
+// use winapi::shared::windef::{HBITMAP, HBITMAP__, HGDIOBJ, HWND, POINT, RECT, SIZE};
+//
+// fn is_runner() {
+//     let window_name = CString::new("12TailsTH").unwrap();
+//     unsafe {
+//         let window_handle = FindWindowA(std::ptr::null_mut(), window_name.as_ptr());
+//         user32::SetForegroundWindow(window_handle);
+//         sleep(Duration::from_millis(200));
+//         user32::ShowWindow(window_handle, 10);
+//
+//         let mut my_rect = unsafe { zeroed::<winapi::shared::windef::RECT>() };
+//         let _client_rect = unsafe { GetClientRect(window_handle, &mut my_rect) };
+//         let w = my_rect.right - my_rect.left;
+//         let h = my_rect.bottom - my_rect.top;
+//         println!("w{} h{}", w,h);
+//     }
+// }
+//
+// fn main() {
+//     println!("Hello, world!");
+//     // let window_name = CString::new("12TailsTH").unwrap();
+//     // unsafe {
+//     //     let window_handle = FindWindowA(std::ptr::null_mut(), window_name.as_ptr());
+//     //     user32::SetForegroundWindow(window_handle);
+//     //     user32::ShowWindow(window_handle, 9);
+//     // }
+//
+//     NumLockKey.bind(|| {
+//         let mut isFirst = false;
+//
+//         while NumLockKey.is_toggled() {
+//             if !isFirst {
+//                 println!("isFirst");
+//                 is_runner();
+//                 isFirst = true;
+//                 sleep(Duration::from_millis(1500));
+//             }
+//             MouseCursor::move_abs(10, 10);
+//             sleep(Duration::from_millis(150));
+//             MouseCursor::move_rel(500, 500);
+//             sleep(Duration::from_millis(150));
+//         }
+//     });
+//     handle_input_events();
+//     let ten_millis = time::Duration::from_millis(1000);
+//     let now = time::Instant::now();
+//
+//     thread::sleep(ten_millis);
+//     let mut enigo = Enigo::new();
+//
+//
+// //paste
+//     enigo.key_down(Key::Control);
+//     enigo.key_click(Key::Layout('v'));
+//     enigo.key_up(Key::Control);
+//     handle_input_events();
+// }
+//
+
+
+#[cfg(windows)]
+extern crate winapi;
+
+use winapi::um::winuser::{FindWindowW, GetClientRect, GetWindowDC, GetDC, ReleaseDC};
+use winapi::um::wingdi::{CreateBitmap, CreateCompatibleBitmap, CreateCompatibleDC, SelectObject, GetObjectW, SaveDC, DeleteDC, DeleteObject};
+use std::ptr::null_mut;
+use std::mem::zeroed;
+use std::ffi::OsStr;
+use std::iter::once;
+use std::os::windows::ffi::OsStrExt;
+use winapi::shared::windef::{HBITMAP, HBITMAP__, HGDIOBJ, HWND, POINT, RECT, SIZE};
+
+
+#[cfg(windows)]
+fn active_window(name: &str) {
+    let window: Vec<u16> = OsStr::new(name).encode_wide().chain(once(0)).collect();
+    let hwnd = unsafe { FindWindowW(null_mut(), window.as_ptr()) };
+    if hwnd != null_mut() {
+        println!("Windows Found");
+        let mut my_rect = unsafe { zeroed::<winapi::shared::windef::RECT>() };
+        let _client_rect = unsafe { GetClientRect(hwnd, &mut my_rect) };
+        let w = my_rect.right - my_rect.left;
+        let h = my_rect.bottom - my_rect.top;
+
+        print!("{} {}", h, w);
+    } else {
+        println!("Not Found");
+    }
+}
+
+#[cfg(windows)]
+fn find_window(name: &str) {
+    let window: Vec<u16> = OsStr::new(name).encode_wide().chain(once(0)).collect();
+
+    let hwnd = unsafe { FindWindowW(null_mut(), window.as_ptr()) };
+
+    if hwnd != null_mut() {
+        println!("Window found");
+ let mut my_rect = unsafe { zeroed::<winapi::shared::windef::RECT>() };
+        let _client_rect = unsafe { GetClientRect(hwnd, &mut my_rect) };
+        let w = my_rect.right - my_rect.left;
+        let h = my_rect.bottom - my_rect.top;
+
+        print!("{}", h);
+
+        let hwnd_dc = unsafe { GetWindowDC(hwnd) };
+        let mem_dc = unsafe { CreateCompatibleDC(hwnd_dc) };
+        let bmp = unsafe { CreateCompatibleBitmap(mem_dc, w, h) };
+
+        //SelectObject(mem_dc, bmp); <== Problem is here
+
+        //DeleteObject(bmp); <== Same problem here
+        unsafe { DeleteDC(mem_dc) };
+        unsafe { ReleaseDC(hwnd, hwnd_dc) };
+        unsafe { SelectObject(mem_dc, bmp as HGDIOBJ) };
+        unsafe { DeleteObject(bmp as HGDIOBJ) };
+    } else {
+        println!("Window not found");
+    }
+}
+
+fn main() {
+    active_window("12TailsTH"); // just for test
+}
